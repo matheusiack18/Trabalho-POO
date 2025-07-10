@@ -4,72 +4,128 @@ CXX = g++
 CXXFLAGS = -std=c++17 -Wall -Wextra -pedantic
 
 # Diretórios
-SRCDIR = .
+SRCDIR = src
+TESTDIR = test
 OBJDIR = obj
 BINDIR = bin
 
-# Arquivos fonte
-SOURCES = Elemento.cpp Aluno.cpp Funcionario.cpp Produto.cpp ListaNaoOrdenada.cpp ListaOrdenada.cpp teste_hierarquia.cpp teste_classes_derivadas.cpp teste_listas_sequenciais.cpp
-OBJECTS = $(SOURCES:%.cpp=$(OBJDIR)/%.o)
+# Subdiretórios de código fonte
+ELEM_DIR = $(SRCDIR)/elementos
+SEQ_DIR = $(SRCDIR)/estruturas_sequenciais
+ENC_DIR = $(SRCDIR)/estruturas_encadeadas
 
-# Executável principal
-TARGET = $(BINDIR)/teste_hierarquia
-TARGET2 = $(BINDIR)/teste_classes_derivadas
-TARGET3 = $(BINDIR)/teste_listas_sequenciais
+# Caminhos de include
+INCLUDES = -I. -I$(ELEM_DIR) -I$(SEQ_DIR) -I$(ENC_DIR)
+
+# Arquivos fonte das classes
+ELEM_SOURCES = $(wildcard $(ELEM_DIR)/*.cpp)
+SEQ_SOURCES = $(wildcard $(SEQ_DIR)/*.cpp)
+ENC_SOURCES = $(wildcard $(ENC_DIR)/*.cpp)
+
+# Arquivos de teste
+TEST_SOURCES = $(wildcard $(TESTDIR)/*.cpp)
+
+# Objetos
+ELEM_OBJECTS = $(ELEM_SOURCES:$(ELEM_DIR)/%.cpp=$(OBJDIR)/elementos/%.o)
+SEQ_OBJECTS = $(SEQ_SOURCES:$(SEQ_DIR)/%.cpp=$(OBJDIR)/estruturas_sequenciais/%.o)
+ENC_OBJECTS = $(ENC_SOURCES:$(ENC_DIR)/%.cpp=$(OBJDIR)/estruturas_encadeadas/%.o)
+
+# Objetos de teste
+TEST_OBJECTS = $(TEST_SOURCES:$(TESTDIR)/%.cpp=$(OBJDIR)/test/%.o)
+
+# Executáveis
+TARGETS = $(BINDIR)/teste_hierarquia.exe \
+          $(BINDIR)/teste_classes_derivadas.exe \
+          $(BINDIR)/demo_completa.exe \
+          $(BINDIR)/teste_listas_sequenciais.exe
 
 # Regra padrão
-all: $(TARGET) $(TARGET2) $(TARGET3)
+all: $(TARGETS)
 
-# Criação do executável
-$(TARGET): $(OBJDIR)/Elemento.o $(OBJDIR)/Aluno.o $(OBJDIR)/Funcionario.o $(OBJDIR)/Produto.o $(OBJDIR)/teste_hierarquia.o | $(BINDIR)
+# Criação dos executáveis
+$(BINDIR)/teste_hierarquia.exe: $(ELEM_OBJECTS) $(OBJDIR)/test/teste_hierarquia.o | $(BINDIR)
 	$(CXX) $^ -o $@
 
-$(TARGET2): $(OBJDIR)/Elemento.o $(OBJDIR)/Aluno.o $(OBJDIR)/Funcionario.o $(OBJDIR)/Produto.o $(OBJDIR)/teste_classes_derivadas.o | $(BINDIR)
+$(BINDIR)/teste_classes_derivadas.exe: $(ELEM_OBJECTS) $(OBJDIR)/test/teste_classes_derivadas.o | $(BINDIR)
 	$(CXX) $^ -o $@
 
-$(TARGET3): $(OBJDIR)/Elemento.o $(OBJDIR)/Aluno.o $(OBJDIR)/Funcionario.o $(OBJDIR)/Produto.o $(OBJDIR)/ListaNaoOrdenada.o $(OBJDIR)/ListaOrdenada.o $(OBJDIR)/teste_listas_sequenciais.o | $(BINDIR)
+$(BINDIR)/demo_completa.exe: $(ELEM_OBJECTS) $(OBJDIR)/test/demo_completa.o | $(BINDIR)
 	$(CXX) $^ -o $@
 
-# Compilação dos arquivos objeto
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp | $(OBJDIR)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+$(BINDIR)/teste_listas_sequenciais.exe: $(ELEM_OBJECTS) $(SEQ_OBJECTS) $(OBJDIR)/test/teste_listas_sequenciais.o | $(BINDIR)
+	$(CXX) $^ -o $@
+
+# Compilação dos objetos das classes
+$(OBJDIR)/elementos/%.o: $(ELEM_DIR)/%.cpp | $(OBJDIR)/elementos
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+
+$(OBJDIR)/estruturas_sequenciais/%.o: $(SEQ_DIR)/%.cpp | $(OBJDIR)/estruturas_sequenciais
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+
+$(OBJDIR)/estruturas_encadeadas/%.o: $(ENC_DIR)/%.cpp | $(OBJDIR)/estruturas_encadeadas
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+
+# Compilação dos objetos de teste
+$(OBJDIR)/test/%.o: $(TESTDIR)/%.cpp | $(OBJDIR)/test
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 # Criação dos diretórios
 $(OBJDIR):
-	mkdir -p $(OBJDIR)
+	@if not exist $(OBJDIR) mkdir $(OBJDIR)
+
+$(OBJDIR)/elementos: | $(OBJDIR)
+	@if not exist $(OBJDIR)\elementos mkdir $(OBJDIR)\elementos
+
+$(OBJDIR)/estruturas_sequenciais: | $(OBJDIR)
+	@if not exist $(OBJDIR)\estruturas_sequenciais mkdir $(OBJDIR)\estruturas_sequenciais
+
+$(OBJDIR)/estruturas_encadeadas: | $(OBJDIR)
+	@if not exist $(OBJDIR)\estruturas_encadeadas mkdir $(OBJDIR)\estruturas_encadeadas
+
+$(OBJDIR)/test: | $(OBJDIR)
+	@if not exist $(OBJDIR)\test mkdir $(OBJDIR)\test
 
 $(BINDIR):
-	mkdir -p $(BINDIR)
+	@if not exist $(BINDIR) mkdir $(BINDIR)
 
 # Limpeza
 clean:
-	rm -rf $(OBJDIR) $(BINDIR)
+	@if exist $(OBJDIR) rmdir /s /q $(OBJDIR)
+	@if exist $(BINDIR) rmdir /s /q $(BINDIR)
 
-# Execução do teste
-test: $(TARGET)
-	./$(TARGET)
+# Execução dos testes
+test-hierarquia: $(BINDIR)/teste_hierarquia.exe
+	./$(BINDIR)/teste_hierarquia.exe
 
-test-completo: $(TARGET2)
-	./$(TARGET2)
+test-classes: $(BINDIR)/teste_classes_derivadas.exe
+	./$(BINDIR)/teste_classes_derivadas.exe
 
-test-listas: $(TARGET3)
-	./$(TARGET3)
+test-demo: $(BINDIR)/demo_completa.exe
+	./$(BINDIR)/demo_completa.exe
 
-# Compilação apenas da hierarquia (sem o main)
-hierarquia: $(OBJDIR)/Elemento.o $(OBJDIR)/Aluno.o $(OBJDIR)/Funcionario.o $(OBJDIR)/Produto.o
+test-listas: $(BINDIR)/teste_listas_sequenciais.exe
+	./$(BINDIR)/teste_listas_sequenciais.exe
 
-# Compilação apenas das listas
-listas: $(OBJDIR)/ListaNaoOrdenada.o $(OBJDIR)/ListaOrdenada.o
+# Executar todos os testes
+test-all: test-hierarquia test-classes test-demo test-listas
+
+# Compilação apenas das classes base
+elementos: $(ELEM_OBJECTS)
+
+# Compilação apenas das estruturas sequenciais
+estruturas-seq: $(SEQ_OBJECTS)
 
 # Regras que não são arquivos
-.PHONY: all clean test test-completo test-listas hierarquia listas
+.PHONY: all clean test-hierarquia test-classes test-demo test-listas test-all elementos estruturas-seq
 
 # Dependências dos headers
-$(OBJDIR)/Aluno.o: Aluno.h Elemento.h
-$(OBJDIR)/Funcionario.o: Funcionario.h Elemento.h
-$(OBJDIR)/Produto.o: Produto.h Elemento.h
-$(OBJDIR)/ListaNaoOrdenada.o: ListaNaoOrdenada.h Elemento.h
-$(OBJDIR)/ListaOrdenada.o: ListaOrdenada.h Elemento.h
-$(OBJDIR)/teste_hierarquia.o: Elemento.h Aluno.h Funcionario.h
-$(OBJDIR)/teste_classes_derivadas.o: Elemento.h Aluno.h Funcionario.h Produto.h
-$(OBJDIR)/teste_listas_sequenciais.o: ListaNaoOrdenada.h ListaOrdenada.h Elemento.h Aluno.h Funcionario.h Produto.h
+$(OBJDIR)/elementos/Aluno.o: $(ELEM_DIR)/Aluno.h $(ELEM_DIR)/Elemento.h ConfigLocale.h
+$(OBJDIR)/elementos/Funcionario.o: $(ELEM_DIR)/Funcionario.h $(ELEM_DIR)/Elemento.h ConfigLocale.h
+$(OBJDIR)/elementos/Produto.o: $(ELEM_DIR)/Produto.h $(ELEM_DIR)/Elemento.h ConfigLocale.h
+$(OBJDIR)/elementos/Elemento.o: $(ELEM_DIR)/Elemento.h
+$(OBJDIR)/estruturas_sequenciais/ListaNaoOrdenada.o: $(SEQ_DIR)/ListaNaoOrdenada.h $(ELEM_DIR)/Elemento.h
+$(OBJDIR)/estruturas_sequenciais/ListaOrdenada.o: $(SEQ_DIR)/ListaOrdenada.h $(ELEM_DIR)/Elemento.h
+$(OBJDIR)/test/teste_hierarquia.o: $(ELEM_DIR)/Elemento.h $(ELEM_DIR)/Aluno.h $(ELEM_DIR)/Funcionario.h ConfigLocale.h
+$(OBJDIR)/test/teste_classes_derivadas.o: $(ELEM_DIR)/Elemento.h $(ELEM_DIR)/Aluno.h $(ELEM_DIR)/Funcionario.h $(ELEM_DIR)/Produto.h ConfigLocale.h
+$(OBJDIR)/test/demo_completa.o: $(ELEM_DIR)/Elemento.h $(ELEM_DIR)/Aluno.h $(ELEM_DIR)/Funcionario.h $(ELEM_DIR)/Produto.h ConfigLocale.h
+$(OBJDIR)/test/teste_listas_sequenciais.o: $(SEQ_DIR)/ListaNaoOrdenada.h $(SEQ_DIR)/ListaOrdenada.h $(ELEM_DIR)/Elemento.h $(ELEM_DIR)/Aluno.h $(ELEM_DIR)/Funcionario.h $(ELEM_DIR)/Produto.h ConfigLocale.h

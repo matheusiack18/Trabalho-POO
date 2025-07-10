@@ -1,5 +1,5 @@
 #include "Funcionario.h"
-#include "ConfigLocale.h"
+#include "../../ConfigLocale.h"
 #include <iostream>
 #include <iomanip>
 #include <locale.h>

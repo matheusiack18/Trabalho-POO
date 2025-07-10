@@ -1,7 +1,7 @@
 #ifndef LISTA_ORDENADA_H
 #define LISTA_ORDENADA_H
 
-#include "Elemento.h"
+#include "../elementos/Elemento.h"
 #include <memory>
 
 /**

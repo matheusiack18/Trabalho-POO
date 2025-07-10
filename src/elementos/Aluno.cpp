@@ -1,5 +1,5 @@
 #include "Aluno.h"
-#include "ConfigLocale.h"
+#include "../../ConfigLocale.h"
 #include <iostream>
 #include <iomanip>
 

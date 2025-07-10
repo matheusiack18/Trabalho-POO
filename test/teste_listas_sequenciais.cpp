@@ -1,9 +1,9 @@
-#include "ListaNaoOrdenada.h"
-#include "ListaOrdenada.h"
-#include "Aluno.h"
-#include "Funcionario.h"
-#include "Produto.h"
-#include "ConfigLocale.h"
+#include "../src/estruturas_sequenciais/ListaNaoOrdenada.h"
+#include "../src/estruturas_sequenciais/ListaOrdenada.h"
+#include "../src/elementos/Aluno.h"
+#include "../src/elementos/Funcionario.h"
+#include "../src/elementos/Produto.h"
+#include "../ConfigLocale.h"
 #include <iostream>
 #include <chrono>
 #include <memory>

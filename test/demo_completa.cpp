@@ -1,8 +1,8 @@
-#include "Elemento.h"
-#include "Aluno.h"
-#include "Funcionario.h"
-#include "Produto.h"
-#include "ConfigLocale.h"
+#include "../src/elementos/Elemento.h"
+#include "../src/elementos/Aluno.h"
+#include "../src/elementos/Funcionario.h"
+#include "../src/elementos/Produto.h"
+#include "../ConfigLocale.h"
 #include <iostream>
 #include <vector>
 #include <memory>

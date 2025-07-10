@@ -27,7 +27,33 @@ Este projeto implementa de forma prática os **quatro pilares da Programação O
 
 ## 🏗️ Estrutura do Projeto
 
-### 📋 Hierarquia de Classes
+### � Organização de Diretórios
+```
+📁 Trabalho POO/
+├── 📁 src/                          # Código fonte
+│   ├── 📁 elementos/                # Classes da hierarquia
+│   │   ├── Elemento.h/.cpp          # Classe abstrata base
+│   │   ├── Aluno.h/.cpp            # Classe derivada Aluno
+│   │   ├── Funcionario.h/.cpp      # Classe derivada Funcionario
+│   │   └── Produto.h/.cpp          # Classe derivada Produto
+│   ├── 📁 estruturas_sequenciais/   # Estruturas de dados
+│   │   ├── ListaNaoOrdenada.h/.cpp  # Lista não ordenada
+│   │   └── ListaOrdenada.h/.cpp     # Lista ordenada
+│   └── 📁 estruturas_encadeadas/    # (Para expansões futuras)
+├── 📁 test/                         # Arquivos de teste
+│   ├── teste_hierarquia.cpp         # Teste de polimorfismo
+│   ├── teste_classes_derivadas.cpp  # Teste das classes
+│   ├── demo_completa.cpp            # Demo geral
+│   └── teste_listas_sequenciais.cpp # Teste das listas
+├── 📁 obj/                          # Arquivos objeto (gerados)
+├── 📁 bin/                          # Executáveis (gerados)
+├── ConfigLocale.h                   # Configuração de português
+├── Makefile                         # Build automatizado
+├── compilar.bat                     # Script de compilação (Windows)
+└── executar_testes.bat             # Script para executar testes
+```
+
+### �📋 Hierarquia de Classes
 ```
 Elemento (abstrata)
 ├── Aluno (matrícula, nome, curso, nota)
@@ -73,58 +99,119 @@ Elemento (abstrata)
 
 ## 🚀 Como Executar
 
-### Compilação Manual
-```bash
-# Compilar objetos
-g++ -c Elemento.cpp
-g++ -c Aluno.cpp  
-g++ -c Funcionario.cpp
-g++ -c Produto.cpp
-g++ -c ListaNaoOrdenada.cpp
-g++ -c ListaOrdenada.cpp
+### 🎯 Método Rápido (Windows)
+```batch
+# 1. Compilar tudo automaticamente com Makefile
+mingw32-make all
 
-# Compilar testes específicos
-g++ -o teste_hierarquia.exe teste_hierarquia.cpp *.o
-g++ -o demo_completa.exe demo_completa.cpp *.o
-g++ -o teste_listas.exe teste_listas_sequenciais.cpp *.o
-g++ -o teste_classes.exe teste_classes_derivadas.cpp *.o
+# 2. Executar testes individuais
+.\bin\teste_hierarquia.exe
+.\bin\demo_completa.exe
+.\bin\teste_listas_sequenciais.exe
+.\bin\teste_classes_derivadas.exe
+
+# 3. Limpar arquivos de build
+mingw32-make clean
 ```
 
-### Execução dos Testes ✅
+### 🎯 Método Alternativo (Scripts)
+```batch
+# 1. Compilar tudo automaticamente
+.\compilar.bat
+
+# 2. Executar todos os testes
+.\executar_testes.bat
+
+# 3. Ou executar teste específico
+.\teste_hierarquia.exe
+.\demo_completa.exe
+.\teste_listas.exe
+.\teste_classes.exe
+```
+
+### 🛠️ Usando Makefile (Completo)
 ```bash
-.\teste_hierarquia.exe      # Testa polimorfismo e herança
-.\demo_completa.exe         # Demonstração geral completa
-.\teste_listas.exe          # Testa estruturas sequenciais
-.\teste_classes.exe         # Testa classes derivadas
+# Compilar tudo
+mingw32-make all
+
+# Compilar apenas classes base
+mingw32-make elementos
+
+# Compilar apenas estruturas sequenciais
+mingw32-make estruturas-seq
+
+# Compilar executáveis específicos
+mingw32-make bin/teste_hierarquia.exe
+mingw32-make bin/demo_completa.exe
+mingw32-make bin/teste_listas_sequenciais.exe
+mingw32-make bin/teste_classes_derivadas.exe
+
+# Executar testes com Makefile
+mingw32-make test-hierarquia
+mingw32-make test-demo
+mingw32-make test-listas
+mingw32-make test-classes
+mingw32-make test-all
+
+# Limpar build
+mingw32-make clean
+```
+
+### 🔧 Compilação Manual (se necessário)
+```bash
+# Compilar classes base
+g++ -std=c++17 -I. -Isrc/elementos -Isrc/estruturas_sequenciais -c src/elementos/Elemento.cpp -o Elemento.o
+g++ -std=c++17 -I. -Isrc/elementos -Isrc/estruturas_sequenciais -c src/elementos/Aluno.cpp -o Aluno.o
+g++ -std=c++17 -I. -Isrc/elementos -Isrc/estruturas_sequenciais -c src/elementos/Funcionario.cpp -o Funcionario.o
+g++ -std=c++17 -I. -Isrc/elementos -Isrc/estruturas_sequenciais -c src/elementos/Produto.cpp -o Produto.o
+
+# Compilar estruturas sequenciais
+g++ -std=c++17 -I. -Isrc/elementos -Isrc/estruturas_sequenciais -c src/estruturas_sequenciais/ListaNaoOrdenada.cpp -o ListaNaoOrdenada.o
+g++ -std=c++17 -I. -Isrc/elementos -Isrc/estruturas_sequenciais -c src/estruturas_sequenciais/ListaOrdenada.cpp -o ListaOrdenada.o
+
+# Compilar testes específicos
+g++ -std=c++17 -I. -Isrc/elementos -Isrc/estruturas_sequenciais -o teste_hierarquia.exe test/teste_hierarquia.cpp Elemento.o Aluno.o Funcionario.o Produto.o
+g++ -std=c++17 -I. -Isrc/elementos -Isrc/estruturas_sequenciais -o demo_completa.exe test/demo_completa.cpp Elemento.o Aluno.o Funcionario.o Produto.o
+g++ -std=c++17 -I. -Isrc/elementos -Isrc/estruturas_sequenciais -o teste_listas.exe test/teste_listas_sequenciais.cpp Elemento.o Aluno.o Funcionario.o Produto.o ListaNaoOrdenada.o ListaOrdenada.o
+g++ -std=c++17 -I. -Isrc/elementos -Isrc/estruturas_sequenciais -o teste_classes.exe test/teste_classes_derivadas.cpp Elemento.o Aluno.o Funcionario.o Produto.o
 ```
 
 ---
 
-## Testes Implementados ✅
+## 📊 Testes Implementados ✅
 
-### 🧪 `teste_hierarquia.cpp` ✅
-- Criação de objetos das classes derivadas
-- Teste de métodos específicos 
-- Demonstração de polimorfismo com ponteiros
-- Teste de operadores de comparação
+### 🧪 `bin/teste_hierarquia.exe` ✅
+- ✅ Criação de objetos das classes derivadas
+- ✅ Teste de métodos específicos 
+- ✅ Demonstração de polimorfismo com ponteiros
+- ✅ Teste de operadores de comparação
 
-### 🧪 `teste_classes_derivadas.cpp` ✅
-- Teste completo da classe Aluno
-- Teste completo da classe Funcionario
-- Demonstração de polimorfismo em vetor heterogêneo
-- Validação de encapsulamento
+### 🧪 `bin/teste_classes_derivadas.exe` ✅
+- ✅ Teste completo da classe Aluno
+- ✅ Teste completo da classe Funcionario
+- ✅ Demonstração de polimorfismo em vetor heterogêneo
+- ✅ Validação de encapsulamento
 
-### 🧪 `demo_completa.cpp` ✅
-- Teste da classe Produto
-- Demonstração polimorfismo com todas as classes
-- Teste de ordenação por ID
-- Resumo das implementações
+### 🧪 `bin/demo_completa.exe` ✅
+- ✅ Teste da classe Produto
+- ✅ Demonstração polimorfismo com todas as classes
+- ✅ Teste de ordenação por ID
+- ✅ Resumo das implementações
 
-### 🧪 `teste_listas_sequenciais.cpp` ✅
-- Teste completo da ListaNaoOrdenada
-- Teste completo da ListaOrdenada
-- Comparação de performance (busca linear vs binária)
-- Análise detalhada de complexidades
+### 🧪 `bin/teste_listas_sequenciais.exe` ✅
+- ✅ Teste completo da ListaNaoOrdenada
+- ✅ Teste completo da ListaOrdenada
+- ✅ Comparação de performance (busca linear vs binária)
+- ✅ Análise detalhada de complexidades
+
+### 🎯 Execução dos Testes
+```bash
+# Executáveis organizados na pasta bin/
+.\bin\teste_hierarquia.exe           # Testa polimorfismo e herança
+.\bin\teste_classes_derivadas.exe    # Testa funcionalidades específicas  
+.\bin\demo_completa.exe              # Demonstração geral completa
+.\bin\teste_listas_sequenciais.exe   # Testa estruturas sequenciais
+```
 
 ---
 
