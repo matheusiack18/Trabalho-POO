@@ -37,7 +37,9 @@ TEST_OBJECTS = $(TEST_SOURCES:$(TESTDIR)/%.cpp=$(OBJDIR)/test/%.o)
 TARGETS = $(BINDIR)/teste_hierarquia.exe \
           $(BINDIR)/teste_classes_derivadas.exe \
           $(BINDIR)/demo_completa.exe \
-          $(BINDIR)/teste_listas_sequenciais.exe
+          $(BINDIR)/teste_listas_sequenciais.exe \
+          $(BINDIR)/teste_pilha_fila.exe \
+          $(BINDIR)/teste_estruturas_encadeadas.exe
 
 # Regra padrão
 all: $(TARGETS)
@@ -53,6 +55,12 @@ $(BINDIR)/demo_completa.exe: $(ELEM_OBJECTS) $(OBJDIR)/test/demo_completa.o | $(
 	$(CXX) $^ -o $@
 
 $(BINDIR)/teste_listas_sequenciais.exe: $(ELEM_OBJECTS) $(SEQ_OBJECTS) $(OBJDIR)/test/teste_listas_sequenciais.o | $(BINDIR)
+	$(CXX) $^ -o $@
+
+$(BINDIR)/teste_pilha_fila.exe: $(ELEM_OBJECTS) $(SEQ_OBJECTS) $(OBJDIR)/test/teste_pilha_fila.o | $(BINDIR)
+	$(CXX) $^ -o $@
+
+$(BINDIR)/teste_estruturas_encadeadas.exe: $(ELEM_OBJECTS) $(ENC_OBJECTS) $(OBJDIR)/test/teste_estruturas_encadeadas.o | $(BINDIR)
 	$(CXX) $^ -o $@
 
 # Compilação dos objetos das classes
@@ -106,8 +114,14 @@ test-demo: $(BINDIR)/demo_completa.exe
 test-listas: $(BINDIR)/teste_listas_sequenciais.exe
 	./$(BINDIR)/teste_listas_sequenciais.exe
 
+test-pilha-fila: $(BINDIR)/teste_pilha_fila.exe
+	./$(BINDIR)/teste_pilha_fila.exe
+
+test-estruturas-encadeadas: $(BINDIR)/teste_estruturas_encadeadas.exe
+	./$(BINDIR)/teste_estruturas_encadeadas.exe
+
 # Executar todos os testes
-test-all: test-hierarquia test-classes test-demo test-listas
+test-all: test-hierarquia test-classes test-demo test-listas test-pilha-fila test-estruturas-encadeadas
 
 # Compilação apenas das classes base
 elementos: $(ELEM_OBJECTS)
@@ -115,8 +129,11 @@ elementos: $(ELEM_OBJECTS)
 # Compilação apenas das estruturas sequenciais
 estruturas-seq: $(SEQ_OBJECTS)
 
+# Compilação apenas das estruturas encadeadas
+estruturas-enc: $(ENC_OBJECTS)
+
 # Regras que não são arquivos
-.PHONY: all clean test-hierarquia test-classes test-demo test-listas test-all elementos estruturas-seq
+.PHONY: all clean test-hierarquia test-classes test-demo test-listas test-pilha-fila test-estruturas-encadeadas test-all elementos estruturas-seq estruturas-enc
 
 # Dependências dos headers
 $(OBJDIR)/elementos/Aluno.o: $(ELEM_DIR)/Aluno.h $(ELEM_DIR)/Elemento.h ConfigLocale.h
@@ -125,7 +142,15 @@ $(OBJDIR)/elementos/Produto.o: $(ELEM_DIR)/Produto.h $(ELEM_DIR)/Elemento.h Conf
 $(OBJDIR)/elementos/Elemento.o: $(ELEM_DIR)/Elemento.h
 $(OBJDIR)/estruturas_sequenciais/ListaNaoOrdenada.o: $(SEQ_DIR)/ListaNaoOrdenada.h $(ELEM_DIR)/Elemento.h
 $(OBJDIR)/estruturas_sequenciais/ListaOrdenada.o: $(SEQ_DIR)/ListaOrdenada.h $(ELEM_DIR)/Elemento.h
+$(OBJDIR)/estruturas_sequenciais/Pilha.o: $(SEQ_DIR)/Pilha.h $(SEQ_DIR)/ListaNaoOrdenada.h $(ELEM_DIR)/Elemento.h
+$(OBJDIR)/estruturas_sequenciais/Fila.o: $(SEQ_DIR)/Fila.h $(SEQ_DIR)/ListaNaoOrdenada.h $(ELEM_DIR)/Elemento.h
+$(OBJDIR)/estruturas_sequenciais/FilaOtimizada.o: $(SEQ_DIR)/FilaOtimizada.h $(ELEM_DIR)/Elemento.h
 $(OBJDIR)/test/teste_hierarquia.o: $(ELEM_DIR)/Elemento.h $(ELEM_DIR)/Aluno.h $(ELEM_DIR)/Funcionario.h ConfigLocale.h
 $(OBJDIR)/test/teste_classes_derivadas.o: $(ELEM_DIR)/Elemento.h $(ELEM_DIR)/Aluno.h $(ELEM_DIR)/Funcionario.h $(ELEM_DIR)/Produto.h ConfigLocale.h
 $(OBJDIR)/test/demo_completa.o: $(ELEM_DIR)/Elemento.h $(ELEM_DIR)/Aluno.h $(ELEM_DIR)/Funcionario.h $(ELEM_DIR)/Produto.h ConfigLocale.h
 $(OBJDIR)/test/teste_listas_sequenciais.o: $(SEQ_DIR)/ListaNaoOrdenada.h $(SEQ_DIR)/ListaOrdenada.h $(ELEM_DIR)/Elemento.h $(ELEM_DIR)/Aluno.h $(ELEM_DIR)/Funcionario.h $(ELEM_DIR)/Produto.h ConfigLocale.h
+$(OBJDIR)/test/teste_pilha_fila.o: $(SEQ_DIR)/Pilha.h $(SEQ_DIR)/Fila.h $(SEQ_DIR)/FilaOtimizada.h $(ELEM_DIR)/Elemento.h $(ELEM_DIR)/Aluno.h $(ELEM_DIR)/Funcionario.h $(ELEM_DIR)/Produto.h ConfigLocale.h
+$(OBJDIR)/test/teste_estruturas_encadeadas.o: $(ENC_DIR)/ListaSimplesmenteEncadeada.h $(ENC_DIR)/ListaDuplamenteEncadeada.h $(ENC_DIR)/ListaDuplamenteEncadeadaCircular.h $(ELEM_DIR)/Elemento.h $(ELEM_DIR)/Aluno.h $(ELEM_DIR)/Funcionario.h $(ELEM_DIR)/Produto.h ConfigLocale.h
+$(OBJDIR)/estruturas_encadeadas/ListaSimplesmenteEncadeada.o: $(ENC_DIR)/ListaSimplesmenteEncadeada.h $(ELEM_DIR)/Elemento.h
+$(OBJDIR)/estruturas_encadeadas/ListaDuplamenteEncadeada.o: $(ENC_DIR)/ListaDuplamenteEncadeada.h $(ELEM_DIR)/Elemento.h
+$(OBJDIR)/estruturas_encadeadas/ListaDuplamenteEncadeadaCircular.o: $(ENC_DIR)/ListaDuplamenteEncadeadaCircular.h $(ELEM_DIR)/Elemento.h
