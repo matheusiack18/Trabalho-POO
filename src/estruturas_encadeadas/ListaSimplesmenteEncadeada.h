@@ -103,6 +103,14 @@ public:
     bool alterarPeloId(long id, std::unique_ptr<Elemento> novoElemento);
     
     /**
+     * @brief Obtém o primeiro elemento da lista sem removê-lo
+     * @return Ponteiro para o primeiro elemento (nullptr se lista vazia)
+     * 
+     * Complexidade: O(1) - acesso direto ao primeiro elemento
+     */
+    Elemento* getPrimeiro() const;
+    
+    /**
      * @brief Remove o primeiro elemento da lista
      * @return Ponteiro único para o elemento removido (nullptr se lista vazia)
      * 

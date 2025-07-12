@@ -99,6 +99,22 @@ bool ListaDuplamenteEncadeada::alterarPeloId(long id, std::unique_ptr<Elemento> 
     return false;
 }
 
+Elemento* ListaDuplamenteEncadeada::getPrimeiro() const {
+    if (estaVazia()) {
+        return nullptr;
+    }
+    
+    return cabeca->dados.get();
+}
+
+Elemento* ListaDuplamenteEncadeada::getUltimo() const {
+    if (estaVazia()) {
+        return nullptr;
+    }
+    
+    return cauda->dados.get();
+}
+
 std::unique_ptr<Elemento> ListaDuplamenteEncadeada::removerPrimeiro() {
     if (estaVazia()) {
         return nullptr;

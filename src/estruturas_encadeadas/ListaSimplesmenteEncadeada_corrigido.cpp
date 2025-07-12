@@ -95,14 +95,6 @@ bool ListaSimplesmenteEncadeada::alterarPeloId(long id, std::unique_ptr<Elemento
     return false;
 }
 
-Elemento* ListaSimplesmenteEncadeada::getPrimeiro() const {
-    if (estaVazia()) {
-        return nullptr;
-    }
-    
-    return cabeca->dados.get();
-}
-
 std::unique_ptr<Elemento> ListaSimplesmenteEncadeada::removerPrimeiro() {
     if (estaVazia()) {
         return nullptr;

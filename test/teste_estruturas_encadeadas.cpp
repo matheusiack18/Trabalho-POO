@@ -1,12 +1,26 @@
 #include "../src/estruturas_encadeadas/ListaSimplesmenteEncadeada.h"
 #include "../src/estruturas_encadeadas/ListaDuplamenteEncadeada.h"
 #include "../src/estruturas_encadeadas/ListaDuplamenteEncadeadaCircular.h"
+#include "../src/estruturas_encadeadas/PilhaEncadeada.h"
+#include "../src/estruturas_encadeadas/FilaEncadeada.h"
+#include "../src/estruturas_encadeadas/Deque.h"
 #include "../src/elementos/Aluno.h"
 #include "../src/elementos/Funcionario.h"
 #include "../src/elementos/Produto.h"
 #include "../ConfigLocale.h"
 #include <iostream>
 #include <memory>
+
+// Declarações das funções de teste
+void testarListaSimplesmenteEncadeada();
+void testarListaDuplamenteEncadeada();
+void testarListaDuplamenteEncadeadaCircular();
+void testarPilhaEncadeada();
+void testarFilaEncadeada();
+void testarDeque();
+void compararEstruturas();
+void demonstrarEncapsulamento();
+void testarAdaptadores();
 
 void testarListaSimplesmenteEncadeada() {
     std::cout << "\n" << std::string(60, '=') << std::endl;
@@ -190,6 +204,108 @@ void testarListaDuplamenteEncadeadaCircular() {
     std::cout << "Verificando integridade após remoção: " << (lista.verificarIntegridade() ? "OK" : "FALHA") << std::endl;
 }
 
+void testarPilhaEncadeada() {
+    std::cout << "\n" << std::string(60, '=') << std::endl;
+    std::cout << "TESTANDO ESTRUTURA: PILHA ENCADEADA" << std::endl;
+    std::cout << std::string(60, '=') << std::endl;
+    
+    PilhaEncadeada pilha;
+    
+    std::cout << "\n1. Testando pilha vazia:" << std::endl;
+    std::cout << "Pilha vazia? " << (pilha.estaVazia() ? "Sim" : "Não") << std::endl;
+    std::cout << "Tamanho: " << pilha.getTamanho() << std::endl;
+    
+    std::cout << "\n2. Empilhando elementos:" << std::endl;
+    auto aluno1 = std::make_unique<Aluno>(1, "João Silva", "Computação", 8.5);
+    auto funcionario1 = std::make_unique<Funcionario>(2, "Maria Santos", "Desenvolvedora", "TI", 6000.0);
+    
+    pilha.empilhar(std::move(aluno1));
+    pilha.empilhar(std::move(funcionario1));
+    
+    std::cout << "Tamanho após empilhamentos: " << pilha.getTamanho() << std::endl;
+    pilha.imprimirPilha();
+    
+    std::cout << "\n3. Testando desempilhamento:" << std::endl;
+    auto desempilhado = pilha.desempilhar();
+    if (desempilhado) {
+        std::cout << "Elemento desempilhado: ";
+        desempilhado->imprimirInfo();
+        std::cout << std::endl;
+    }
+    std::cout << "Tamanho após desempilhamento: " << pilha.getTamanho() << std::endl;
+    pilha.imprimirPilha();
+}
+
+void testarFilaEncadeada() {
+    std::cout << "\n" << std::string(60, '=') << std::endl;
+    std::cout << "TESTANDO ESTRUTURA: FILA ENCADEADA" << std::endl;
+    std::cout << std::string(60, '=') << std::endl;
+    
+    FilaEncadeada fila;
+    
+    std::cout << "\n1. Testando fila vazia:" << std::endl;
+    std::cout << "Fila vazia? " << (fila.estaVazia() ? "Sim" : "Não") << std::endl;
+    std::cout << "Tamanho: " << fila.getTamanho() << std::endl;
+    
+    std::cout << "\n2. Enfileirando elementos:" << std::endl;
+    auto aluno1 = std::make_unique<Aluno>(1, "João Silva", "Computação", 8.5);
+    auto funcionario1 = std::make_unique<Funcionario>(2, "Maria Santos", "Desenvolvedora", "TI", 6000.0);
+    
+    fila.enfileirar(std::move(aluno1));
+    fila.enfileirar(std::move(funcionario1));
+    
+    std::cout << "Tamanho após enfileiramentos: " << fila.getTamanho() << std::endl;
+    fila.imprimirFila();
+    
+    std::cout << "\n3. Testando desenfileiramento:" << std::endl;
+    auto desenfileirado = fila.desenfileirar();
+    if (desenfileirado) {
+        std::cout << "Elemento desenfileirado: ";
+        desenfileirado->imprimirInfo();
+        std::cout << std::endl;
+    }
+    std::cout << "Tamanho após desenfileiramento: " << fila.getTamanho() << std::endl;
+    fila.imprimirFila();
+}
+
+void testarDeque() {
+    std::cout << "\n" << std::string(60, '=') << std::endl;
+    std::cout << "TESTANDO ESTRUTURA: DEQUE" << std::endl;
+    std::cout << std::string(60, '=') << std::endl;
+    
+    Deque deque;
+    
+    std::cout << "\n1. Testando deque vazio:" << std::endl;
+    std::cout << "Deque vazio? " << (deque.estaVazio() ? "Sim" : "Não") << std::endl;
+    std::cout << "Tamanho: " << deque.getTamanho() << std::endl;
+    
+    std::cout << "\n2. Adicionando elementos:" << std::endl;
+    auto aluno1 = std::make_unique<Aluno>(1, "João Silva", "Computação", 8.5);
+    auto funcionario1 = std::make_unique<Funcionario>(2, "Maria Santos", "Desenvolvedora", "TI", 6000.0);
+    
+    deque.inserirInicio(std::move(aluno1));
+    deque.inserirFim(std::move(funcionario1));
+    
+    std::cout << "Tamanho após adições: " << deque.getTamanho() << std::endl;
+    deque.imprimirDeque();
+    
+    std::cout << "\n3. Removendo elementos:" << std::endl;
+    auto removidoInicio = deque.removerInicio();
+    if (removidoInicio) {
+        std::cout << "Elemento removido do início: ";
+        removidoInicio->imprimirInfo();
+        std::cout << std::endl;
+    }
+    auto removidoFim = deque.removerFim();
+    if (removidoFim) {
+        std::cout << "Elemento removido do fim: ";
+        removidoFim->imprimirInfo();
+        std::cout << std::endl;
+    }
+    std::cout << "Tamanho após remoções: " << deque.getTamanho() << std::endl;
+    deque.imprimirDeque();
+}
+
 void compararEstruturas() {
     std::cout << "\n" << std::string(70, '=') << std::endl;
     std::cout << "COMPARAÇÃO DE ESTRUTURAS ENCADEADAS" << std::endl;
@@ -278,6 +394,9 @@ int main() {
         testarListaSimplesmenteEncadeada();
         testarListaDuplamenteEncadeada();
         testarListaDuplamenteEncadeadaCircular();
+        testarPilhaEncadeada();
+        testarFilaEncadeada();
+        testarDeque();
         compararEstruturas();
         demonstrarEncapsulamento();
         

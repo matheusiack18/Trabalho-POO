@@ -17,11 +17,14 @@ private:
 
 public:
     /**
-     * @brief
-     * @param id
-     * @param nome
-     * @param curso
-     * @param nota
+     * @brief Construtor da classe Aluno
+     * @param id Identificador único do aluno (matrícula)
+     * @param nome Nome completo do aluno
+     * @param curso Curso em que está matriculado
+     * @param nota Nota atual do aluno (0.0 a 10.0)
+     * 
+     * Inicializa um novo aluno com todas as informações necessárias.
+     * A nota é validada para estar entre 0.0 e 10.0.
      */
     Aluno(long id, const std::string& nome, const std::string& curso, double nota);
 

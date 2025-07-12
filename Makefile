@@ -34,15 +34,22 @@ ENC_OBJECTS = $(ENC_SOURCES:$(ENC_DIR)/%.cpp=$(OBJDIR)/estruturas_encadeadas/%.o
 TEST_OBJECTS = $(TEST_SOURCES:$(TESTDIR)/%.cpp=$(OBJDIR)/test/%.o)
 
 # Executáveis
-TARGETS = $(BINDIR)/teste_hierarquia.exe \
+TARGETS = $(BINDIR)/main.exe \
+          $(BINDIR)/teste_hierarquia.exe \
           $(BINDIR)/teste_classes_derivadas.exe \
           $(BINDIR)/demo_completa.exe \
           $(BINDIR)/teste_listas_sequenciais.exe \
           $(BINDIR)/teste_pilha_fila.exe \
-          $(BINDIR)/teste_estruturas_encadeadas.exe
+          $(BINDIR)/teste_estruturas_encadeadas.exe \
+          $(BINDIR)/teste_adaptadores.exe \
+          $(BINDIR)/teste_arvore_binaria.exe
 
 # Regra padrão
 all: $(TARGETS)
+
+# Main principal do projeto
+$(BINDIR)/main.exe: $(ELEM_OBJECTS) $(SEQ_OBJECTS) $(ENC_OBJECTS) $(OBJDIR)/main.o | $(BINDIR)
+	$(CXX) $^ -o $@
 
 # Criação dos executáveis
 $(BINDIR)/teste_hierarquia.exe: $(ELEM_OBJECTS) $(OBJDIR)/test/teste_hierarquia.o | $(BINDIR)
@@ -63,6 +70,12 @@ $(BINDIR)/teste_pilha_fila.exe: $(ELEM_OBJECTS) $(SEQ_OBJECTS) $(OBJDIR)/test/te
 $(BINDIR)/teste_estruturas_encadeadas.exe: $(ELEM_OBJECTS) $(ENC_OBJECTS) $(OBJDIR)/test/teste_estruturas_encadeadas.o | $(BINDIR)
 	$(CXX) $^ -o $@
 
+$(BINDIR)/teste_adaptadores.exe: $(ELEM_OBJECTS) $(OBJDIR)/estruturas_encadeadas/PilhaEncadeada.o $(OBJDIR)/estruturas_encadeadas/FilaEncadeada.o $(OBJDIR)/estruturas_encadeadas/Deque.o $(OBJDIR)/estruturas_encadeadas/ListaSimplesmenteEncadeada.o $(OBJDIR)/estruturas_encadeadas/ListaDuplamenteEncadeada.o $(OBJDIR)/test/teste_adaptadores.o | $(BINDIR)
+	$(CXX) $^ -o $@
+
+$(BINDIR)/teste_arvore_binaria.exe: $(ELEM_OBJECTS) $(OBJDIR)/estruturas_encadeadas/ArvoreBinariaBusca.o $(OBJDIR)/test/teste_arvore_binaria.o | $(BINDIR)
+	$(CXX) $^ -o $@
+
 # Compilação dos objetos das classes
 $(OBJDIR)/elementos/%.o: $(ELEM_DIR)/%.cpp | $(OBJDIR)/elementos
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
@@ -75,6 +88,10 @@ $(OBJDIR)/estruturas_encadeadas/%.o: $(ENC_DIR)/%.cpp | $(OBJDIR)/estruturas_enc
 
 # Compilação dos objetos de teste
 $(OBJDIR)/test/%.o: $(TESTDIR)/%.cpp | $(OBJDIR)/test
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+
+# Compilação do main.cpp 
+$(OBJDIR)/main.o: main.cpp | $(OBJDIR)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 # Criação dos diretórios
@@ -101,15 +118,18 @@ clean:
 	@if exist $(OBJDIR) rmdir /s /q $(OBJDIR)
 	@if exist $(BINDIR) rmdir /s /q $(BINDIR)
 
-# Execução dos testes
+# Tarefas de teste
+run-main: $(BINDIR)/main.exe
+	./$(BINDIR)/main.exe
+
 test-hierarquia: $(BINDIR)/teste_hierarquia.exe
 	./$(BINDIR)/teste_hierarquia.exe
 
-test-classes: $(BINDIR)/teste_classes_derivadas.exe
-	./$(BINDIR)/teste_classes_derivadas.exe
-
 test-demo: $(BINDIR)/demo_completa.exe
 	./$(BINDIR)/demo_completa.exe
+
+test-classes: $(BINDIR)/teste_classes_derivadas.exe
+	./$(BINDIR)/teste_classes_derivadas.exe
 
 test-listas: $(BINDIR)/teste_listas_sequenciais.exe
 	./$(BINDIR)/teste_listas_sequenciais.exe
@@ -120,8 +140,13 @@ test-pilha-fila: $(BINDIR)/teste_pilha_fila.exe
 test-estruturas-encadeadas: $(BINDIR)/teste_estruturas_encadeadas.exe
 	./$(BINDIR)/teste_estruturas_encadeadas.exe
 
-# Executar todos os testes
-test-all: test-hierarquia test-classes test-demo test-listas test-pilha-fila test-estruturas-encadeadas
+test-adaptadores: $(BINDIR)/teste_adaptadores.exe
+	./$(BINDIR)/teste_adaptadores.exe
+
+test-arvore-binaria: $(BINDIR)/teste_arvore_binaria.exe
+	./$(BINDIR)/teste_arvore_binaria.exe
+
+test-all: test-hierarquia test-demo test-classes test-listas test-pilha-fila test-estruturas-encadeadas test-adaptadores test-arvore-binaria
 
 # Compilação apenas das classes base
 elementos: $(ELEM_OBJECTS)
@@ -133,7 +158,7 @@ estruturas-seq: $(SEQ_OBJECTS)
 estruturas-enc: $(ENC_OBJECTS)
 
 # Regras que não são arquivos
-.PHONY: all clean test-hierarquia test-classes test-demo test-listas test-pilha-fila test-estruturas-encadeadas test-all elementos estruturas-seq estruturas-enc
+.PHONY: all clean test-hierarquia test-demo test-classes test-listas test-pilha-fila test-estruturas-encadeadas test-adaptadores test-arvore-binaria test-all run-main
 
 # Dependências dos headers
 $(OBJDIR)/elementos/Aluno.o: $(ELEM_DIR)/Aluno.h $(ELEM_DIR)/Elemento.h ConfigLocale.h
@@ -150,7 +175,8 @@ $(OBJDIR)/test/teste_classes_derivadas.o: $(ELEM_DIR)/Elemento.h $(ELEM_DIR)/Alu
 $(OBJDIR)/test/demo_completa.o: $(ELEM_DIR)/Elemento.h $(ELEM_DIR)/Aluno.h $(ELEM_DIR)/Funcionario.h $(ELEM_DIR)/Produto.h ConfigLocale.h
 $(OBJDIR)/test/teste_listas_sequenciais.o: $(SEQ_DIR)/ListaNaoOrdenada.h $(SEQ_DIR)/ListaOrdenada.h $(ELEM_DIR)/Elemento.h $(ELEM_DIR)/Aluno.h $(ELEM_DIR)/Funcionario.h $(ELEM_DIR)/Produto.h ConfigLocale.h
 $(OBJDIR)/test/teste_pilha_fila.o: $(SEQ_DIR)/Pilha.h $(SEQ_DIR)/Fila.h $(SEQ_DIR)/FilaOtimizada.h $(ELEM_DIR)/Elemento.h $(ELEM_DIR)/Aluno.h $(ELEM_DIR)/Funcionario.h $(ELEM_DIR)/Produto.h ConfigLocale.h
-$(OBJDIR)/test/teste_estruturas_encadeadas.o: $(ENC_DIR)/ListaSimplesmenteEncadeada.h $(ENC_DIR)/ListaDuplamenteEncadeada.h $(ENC_DIR)/ListaDuplamenteEncadeadaCircular.h $(ELEM_DIR)/Elemento.h $(ELEM_DIR)/Aluno.h $(ELEM_DIR)/Funcionario.h $(ELEM_DIR)/Produto.h ConfigLocale.h
-$(OBJDIR)/estruturas_encadeadas/ListaSimplesmenteEncadeada.o: $(ENC_DIR)/ListaSimplesmenteEncadeada.h $(ELEM_DIR)/Elemento.h
-$(OBJDIR)/estruturas_encadeadas/ListaDuplamenteEncadeada.o: $(ENC_DIR)/ListaDuplamenteEncadeada.h $(ELEM_DIR)/Elemento.h
-$(OBJDIR)/estruturas_encadeadas/ListaDuplamenteEncadeadaCircular.o: $(ENC_DIR)/ListaDuplamenteEncadeadaCircular.h $(ELEM_DIR)/Elemento.h
+$(OBJDIR)/test/teste_estruturas_encadeadas.o: $(ENC_DIR)/ListaSimplesmenteEncadeada.h $(ENC_DIR)/ListaDuplamenteEncadeada.h $(ENC_DIR)/ListaDuplamenteEncadeadaCircular.h $(ENC_DIR)/PilhaEncadeada.h $(ENC_DIR)/FilaEncadeada.h $(ENC_DIR)/Deque.h $(ELEM_DIR)/Elemento.h $(ELEM_DIR)/Aluno.h $(ELEM_DIR)/Funcionario.h $(ELEM_DIR)/Produto.h ConfigLocale.h
+$(OBJDIR)/test/teste_adaptadores.o: $(ENC_DIR)/PilhaEncadeada.h $(ENC_DIR)/FilaEncadeada.h $(ENC_DIR)/Deque.h $(ELEM_DIR)/Elemento.h $(ELEM_DIR)/Aluno.h $(ELEM_DIR)/Funcionario.h $(ELEM_DIR)/Produto.h ConfigLocale.h
+$(OBJDIR)/test/teste_arvore_binaria.o: $(ENC_DIR)/ArvoreBinariaBusca.h $(ELEM_DIR)/Elemento.h $(ELEM_DIR)/Aluno.h $(ELEM_DIR)/Funcionario.h $(ELEM_DIR)/Produto.h ConfigLocale.h
+$(OBJDIR)/estruturas_encadeadas/ArvoreBinariaBusca.o: $(ENC_DIR)/ArvoreBinariaBusca.h $(ELEM_DIR)/Elemento.h
+$(OBJDIR)/main.o: $(ELEM_DIR)/Elemento.h $(ELEM_DIR)/Aluno.h $(ELEM_DIR)/Funcionario.h $(ELEM_DIR)/Produto.h $(SEQ_DIR)/ListaNaoOrdenada.h $(SEQ_DIR)/ListaOrdenada.h $(SEQ_DIR)/Pilha.h $(SEQ_DIR)/Fila.h $(SEQ_DIR)/FilaOtimizada.h $(ENC_DIR)/ListaSimplesmenteEncadeada.h $(ENC_DIR)/ListaDuplamenteEncadeada.h $(ENC_DIR)/PilhaEncadeada.h $(ENC_DIR)/FilaEncadeada.h $(ENC_DIR)/Deque.h $(ENC_DIR)/ArvoreBinariaBusca.h ConfigLocale.h
