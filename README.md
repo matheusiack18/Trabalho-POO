@@ -1,4 +1,4 @@
-# 🚀 Estruturas de Dados Orientadas a Objetos em C++
+# Estruturas de Dados Orientadas a Objetos em C++
 
 ## Integrantes do Grupo
 - Caio Bento 
@@ -59,7 +59,7 @@
 
 ---
 
-## 📊 Tabela de Complexidade das Operações
+## Tabela de Complexidade das Operações
 
 ### Estruturas Sequenciais
 | Estrutura | Inserir Início | Inserir Fim | Buscar | Remover | Observações |
@@ -94,7 +94,7 @@
 
 ---
 
-## 🎯 Execução dos Testes
+## Execução dos Testes
 
 ### Compilação e Execução
 ```bash
@@ -113,11 +113,11 @@ mingw32-make all
 ```
 
 ### Funcionalidades Testadas
-- ✅ **Polimorfismo**: Diferentes classes usando a mesma interface
-- ✅ **Encapsulamento**: Acesso apenas através da interface pública
-- ✅ **Herança**: Reutilização de código da classe base
-- ✅ **Composição**: Reutilização através de adaptadores
-- ✅ **Performance**: Comparação de complexidades
+- **Polimorfismo**: Diferentes classes usando a mesma interface
+- **Encapsulamento**: Acesso apenas através da interface pública
+- **Herança**: Reutilização de código da classe base
+- **Composição**: Reutilização através de adaptadores
+- **Performance**: Comparação de complexidades
 
 ---
 
