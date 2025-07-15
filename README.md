@@ -59,30 +59,30 @@
 
 ---
 
-## Tabela de Complexidade das Operações
+## Tabela Completa de Complexidade das Operações
 
 ### Estruturas Sequenciais
-| Estrutura | Inserir Início | Inserir Fim | Buscar | Remover | Observações |
-|-----------|----------------|-------------|--------|---------|-------------|
-| **ListaNaoOrdenada** | O(n) | O(1) | O(n) | O(n) | Busca linear |
-| **ListaOrdenada** | O(n) | O(n) | **O(log n)** | O(n) | Busca binária otimizada |
-| **Pilha** | O(1) | - | - | O(1) | LIFO - apenas topo |
-| **Fila** | - | O(1) | - | O(n) | FIFO - ineficiente |
-| **FilaOtimizada** | - | O(1) | - | **O(1)** | Buffer circular |
+| Estrutura | Inserir Início | Inserir Fim | Buscar ID | Remover ID | Remover Primeiro | Remover Último | Alterar ID |
+|-----------|----------------|-------------|-----------|------------|------------------|----------------|------------|
+| **ListaNaoOrdenada** | O(n) | O(1) | O(n) | O(n) | O(n) | O(1) | O(n) |
+| **ListaOrdenada** | O(n) | O(n) | **O(log n)** | O(n) | O(n) | O(1) | O(n) |
+| **Pilha** | O(1) empilhar | - | - | - | O(1) desempilhar | - | - |
+| **Fila** | - | O(1) enfileirar | - | - | O(n) desenfileirar | - | - |
+| **FilaOtimizada** | - | O(1) enfileirar | - | - | **O(1)** desenfileirar | - | - |
 
 ### Estruturas Encadeadas
-| Estrutura | Inserir Início | Inserir Fim | Buscar | Remover | Vantagens |
-|-----------|----------------|-------------|--------|---------|-----------|
-| **ListaSimples** | O(1) | O(1) | O(n) | O(n) | Memória dinâmica |
-| **ListaDupla** | O(1) | O(1) | O(n) | O(n) | Navegação bidirecional |
-| **ListaCircular** | O(1) | O(1) | O(n) | O(n) | Acesso cíclico |
+| Estrutura | Inserir Início | Inserir Fim | Buscar ID | Remover ID | Alterar ID | Navegação | Vantagens |
+|-----------|----------------|-------------|-----------|------------|------------|-----------|-----------|
+| **ListaSimples** | O(1) | O(1) | O(n) | O(n) | O(n) | → | Memória dinâmica |
+| **ListaDupla** | O(1) | O(1) | O(n) | O(n) | O(n) | ← → | Navegação bidirecional |
+| **ListaCircular** | O(1) | O(1) | O(n) | O(n) | O(n) | ↻ | Acesso cíclico |
 
 ### Adaptadores por Composição
-| Adaptador | Operação Principal | Complexidade | Estrutura Interna |
-|-----------|-------------------|-------------|-------------------|
-| **PilhaEncadeada** | empilhar/desempilhar | O(1) | ListaSimplesmenteEncadeada |
-| **FilaEncadeada** | enfileirar/desenfileirar | O(1) | ListaSimplesmenteEncadeada |
-| **Deque** | inserir/remover ambas extremidades | O(1) | ListaDuplamenteEncadeada |
+| Adaptador | Operação Principal | Inserir | Remover | Consultar | Verificar (vazio/cheio) | Estrutura Interna |
+|-----------|-------------------|---------|---------|-----------|-------------------|
+| **PilhaEncadeada** | LIFO | O(1) empilhar | O(1) desempilhar | O(1) topo | `pilhaVazia()` / `pilhaCheia()` - O(1) | ListaSimplesmenteEncadeada |
+| **FilaEncadeada** | FIFO | O(1) enfileirar | O(n) desenfileirar | O(1) frente | `filaVazia()` / `filaCheia()` - O(1) | ListaSimplesmenteEncadeada |
+| **Deque** | Dupla extremidade | O(1) início/fim | O(1) início/fim | O(1) início/fim | `filaVazia()` / `filaCheia()` - O(1) | ListaDuplamenteEncadeada |
 
 ### Árvore Binária de Busca
 | Operação | Melhor Caso | Caso Médio | Pior Caso | Observações |
@@ -90,7 +90,38 @@
 | **Inserir** | O(log n) | O(log n) | O(n) | Degrada se desbalanceada |
 | **Buscar** | O(log n) | O(log n) | O(n) | Eficiente se balanceada |
 | **Remover** | O(log n) | O(log n) | O(n) | Complexa para 2 filhos |
-| **Percursos** | O(n) | O(n) | O(n) | Visita todos os nós |
+| **EmOrdem** | O(n) | O(n) | O(n) | Produz sequência ordenada |
+| **PreOrdem** | O(n) | O(n) | O(n) | Útil para copiar árvore |
+| **PosOrdem** | O(n) | O(n) | O(n) | Útil para liberar memória |
+| **Mínimo** | O(log n) | O(log n) | O(n) | Caminho à esquerda |
+| **Máximo** | O(log n) | O(log n) | O(n) | Caminho à direita |
+| **Altura** | O(n) | O(n) | O(n) | Visita todos os nós |
+
+### Comparação de Performance por Operação
+
+#### Busca por ID
+| Estrutura | Complexidade | Método | Eficiência |
+|-----------|-------------|--------|------------|
+| **ListaNaoOrdenada** | O(n) | Busca linear | 🔴 Lenta |
+| **ListaOrdenada** | **O(log n)** | Busca binária | 🟡 Rápida |
+| **Listas Encadeadas** | O(n) | Busca linear | 🔴 Lenta |
+| **ArvoreBinariaBusca** | **O(log n)** | Busca hierárquica | 🟢 Muito rápida |
+
+#### Inserção
+| Estrutura | No Início | No Fim | Ordenada | Observações |
+|-----------|-----------|--------|----------|-------------|
+| **ListaNaoOrdenada** | O(n) | O(1) | - | Deslocamento de elementos |
+| **ListaOrdenada** | O(n) | O(n) | O(n) | Mantém ordenação |
+| **Listas Encadeadas** | O(1) | O(1) | - | Sem deslocamento |
+| **ArvoreBinariaBusca** | - | - | O(log n) | Auto-organizada |
+
+#### Remoção
+| Estrutura | Primeiro | Último | Por ID | Observações |
+|-----------|----------|--------|--------|-------------|
+| **ListaNaoOrdenada** | O(n) | O(1) | O(n) | Deslocamento |
+| **ListaOrdenada** | O(n) | O(1) | O(n) | Mantém ordenação |
+| **Listas Encadeadas** | O(1) | O(1)/O(n) | O(n) | Depende da estrutura |
+| **ArvoreBinariaBusca** | - | - | O(log n) | Reorganização automática |
 
 ---
 
@@ -110,6 +141,7 @@ mingw32-make all
 .\bin\teste_estruturas_encadeadas.exe # Estruturas encadeadas
 .\bin\teste_adaptadores.exe          # Adaptadores por composição
 .\bin\teste_arvore_binaria.exe       # Árvore binária de busca
+.\bin\teste_pilha_fila.exe          # Pilha e filas
 ```
 
 ### Funcionalidades Testadas
@@ -125,12 +157,12 @@ mingw32-make all
 
 ### Classes da Hierarquia
 - **Elemento** (abstrata) - Base com ID comum
-- **Aluno** - Matrícula, nome, curso, nota
+- **Aluno** - Matrícula, nome, curso, nota (validação 0-10)
 - **Funcionario** - ID, nome, cargo, departamento, salário
 - **Produto** - Código, nome, marca, categoria, preço, estoque
 
 ### Estruturas Implementadas
-- **6 Estruturas Sequenciais** - Listas, pilhas e filas
+- **5 Estruturas Sequenciais** - Listas, pilhas e filas
 - **3 Estruturas Encadeadas** - Com nós privados encapsulados
 - **3 Adaptadores por Composição** - Reutilização de código
 - **1 Estrutura Hierárquica** - Árvore Binária de Busca
@@ -141,3 +173,38 @@ mingw32-make all
 - **Navegação bidirecional** na lista dupla
 - **Percursos da árvore** (em ordem, pré-ordem, pós-ordem)
 - **Gerenciamento automático de memória** com smart pointers
+- **Encapsulamento total** com nós privados
+- **Suporte completo ao português** com ConfigLocale.h
+
+---
+
+## Análise de Complexidade por Caso de Uso
+
+### Para Aplicações que Precisam de Busca Frequente
+**Recomendação**: ArvoreBinariaBusca > ListaOrdenada > Listas Encadeadas
+- **ABB**: O(log n) - Ideal para muitas buscas
+- **Lista Ordenada**: O(log n) - Boa para dados sequenciais
+- **Listas Encadeadas**: O(n) - Evitar para busca intensiva
+
+### Para Aplicações com Inserções/Remoções Frequentes no Início
+**Recomendação**: Listas Encadeadas > Pilha > Listas Sequenciais
+- **Listas Encadeadas**: O(1) - Sem deslocamento
+- **Pilha**: O(1) - Ideal para padrão LIFO
+- **Listas Sequenciais**: O(n) - Deslocamento custoso
+
+### Para Aplicações com Acesso Sequencial
+**Recomendação**: Listas Sequenciais > Listas Encadeadas
+- **Listas Sequenciais**: Melhor localidade de memória
+- **Listas Encadeadas**: Fragmentação de memória
+
+### Para Aplicações com Padrões LIFO/FIFO
+**Recomendação**: Adaptadores Específicos
+- **LIFO**: PilhaEncadeada - O(1) todas operações
+- **FIFO**: FilaOtimizada - O(1) todas operações
+- **Dupla Extremidade**: Deque - O(1) ambas extremidades
+
+---
+
+## Conclusão
+
+Este projeto demonstra a implementação completa de estruturas de dados orientadas a objetos em C++, com foco na análise de complexidade e escolha adequada de estruturas para diferentes cenários de uso. A implementação garante encapsulamento total, reutilização de código através de composição e herança, e performance otimizada através de algoritmos eficientes como busca binária e buffer circular.

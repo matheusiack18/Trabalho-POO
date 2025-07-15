@@ -48,7 +48,7 @@ TARGETS = $(BINDIR)/main.exe \
 all: $(TARGETS)
 
 # Main principal do projeto
-$(BINDIR)/main.exe: $(ELEM_OBJECTS) $(SEQ_OBJECTS) $(ENC_OBJECTS) $(OBJDIR)/main.o | $(BINDIR)
+$(BINDIR)/main.exe: $(ELEM_OBJECTS) $(SEQ_OBJECTS) $(ENC_OBJECTS) $(OBJDIR)/main.o $(OBJDIR)/funcoes.o | $(BINDIR)
 	$(CXX) $^ -o $@
 
 # Criação dos executáveis
@@ -92,6 +92,10 @@ $(OBJDIR)/test/%.o: $(TESTDIR)/%.cpp | $(OBJDIR)/test
 
 # Compilação do main.cpp 
 $(OBJDIR)/main.o: main.cpp | $(OBJDIR)
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+
+# Compilação do funcoes.cpp
+$(OBJDIR)/funcoes.o: funcoes.cpp | $(OBJDIR)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 # Criação dos diretórios
@@ -180,3 +184,4 @@ $(OBJDIR)/test/teste_adaptadores.o: $(ENC_DIR)/PilhaEncadeada.h $(ENC_DIR)/FilaE
 $(OBJDIR)/test/teste_arvore_binaria.o: $(ENC_DIR)/ArvoreBinariaBusca.h $(ELEM_DIR)/Elemento.h $(ELEM_DIR)/Aluno.h $(ELEM_DIR)/Funcionario.h $(ELEM_DIR)/Produto.h ConfigLocale.h
 $(OBJDIR)/estruturas_encadeadas/ArvoreBinariaBusca.o: $(ENC_DIR)/ArvoreBinariaBusca.h $(ELEM_DIR)/Elemento.h
 $(OBJDIR)/main.o: $(ELEM_DIR)/Elemento.h $(ELEM_DIR)/Aluno.h $(ELEM_DIR)/Funcionario.h $(ELEM_DIR)/Produto.h $(SEQ_DIR)/ListaNaoOrdenada.h $(SEQ_DIR)/ListaOrdenada.h $(SEQ_DIR)/Pilha.h $(SEQ_DIR)/Fila.h $(SEQ_DIR)/FilaOtimizada.h $(ENC_DIR)/ListaSimplesmenteEncadeada.h $(ENC_DIR)/ListaDuplamenteEncadeada.h $(ENC_DIR)/PilhaEncadeada.h $(ENC_DIR)/FilaEncadeada.h $(ENC_DIR)/Deque.h $(ENC_DIR)/ArvoreBinariaBusca.h ConfigLocale.h
+$(OBJDIR)/funcoes.o: funcoes.h
